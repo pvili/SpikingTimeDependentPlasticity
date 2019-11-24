@@ -29,7 +29,6 @@ def plot_spiking_rate_with_learning(spikesInitial, spikesFinal, neurons, timePlo
     plt.ylabel('s(t)')
     plt.title(title)
     if savePlots:
-        #print('Print should work!')
         plt.savefig(path_fig +'/'+ saveFigName +'.pdf', format = 'pdf')
     if showPlots:
         plt.show()
@@ -84,10 +83,6 @@ def plot_spikeCount(sim_results, neurons=1000, saveFigName = []):
         plt.show()
    
     
-#def plot_spikeCountPerWindowLength(sim_results, windowLengths, neurons=1000, saveFigName = []):
-#    for l in windowLengths:
-        
-    
 def plot_cumulative_ISI(spike_list, neurons = 1000, count_ISI = 5, refISI = [], t_ref = 2., timePlot = timePlotCISI,  title =[], saveFigName = []):
 
     ordered_ISI = dp.interSpikeIntervals(spike_list, range(1,neurons))
@@ -96,19 +91,17 @@ def plot_cumulative_ISI(spike_list, neurons = 1000, count_ISI = 5, refISI = [], 
     suf = lambda n: "%d%s"%(n,{1:"st",2:"nd",3:"rd"}.get(n if n<20 else n%10,"th"))
     
     firstSpike = [ts - 1 for ts in ordered_ISI[0]]
-    percOfNeuronsFiring = 1#float(len(firstSpike))/float(neurons)
-    stepY = np.linspace(0, percOfNeuronsFiring, len(firstSpike))
+    stepY = np.linspace(0, 1, len(firstSpike))
     plt.step(firstSpike, stepY, color = col[0], label=suf(1) + ' spike')
     
     for n in range(1,count_ISI):
         correctedISI = [(o - t_ref) for o in ordered_ISI[n]]
-        #percOfNeuronsFiring = float(len(correctedISI))/float(neurons)
-        stepY = np.linspace(0, percOfNeuronsFiring, len(correctedISI))
+        stepY = np.linspace(0, 1, len(correctedISI))
         plt.step(correctedISI, stepY , color = col[n], label= suf(n+1) + ' spike')
         
     if refISI:
         #percOfNeuronsFiring = float(len(refISI))/float(neurons)#/dp.countISI_merge
-        stepY = np.linspace(0, percOfNeuronsFiring, len(refISI))
+        stepY = np.linspace(0, 1, len(refISI))
         plt.step(refISI, stepY , color = 'k', label = 'Before learning',linestyle='--')
         
     if len(refISI) >1:
@@ -120,7 +113,6 @@ def plot_cumulative_ISI(spike_list, neurons = 1000, count_ISI = 5, refISI = [], 
     plt.xlim(0,timePlot)
     plt.title(title)
     if savePlots:
-        #print('Print should work!')
         plt.savefig(path_fig +'/'+ saveFigName +'.pdf', format = 'pdf')
     if showPlots:
         plt.show()
